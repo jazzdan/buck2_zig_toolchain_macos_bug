@@ -1,5 +1,18 @@
-load("@prelude//toolchains:demo.bzl", "system_demo_toolchains")
+load("@prelude//toolchains:python.bzl", "system_python_bootstrap_toolchain")
+load("@prelude//toolchains/cxx/zig:defs.bzl", "download_zig_distribution", "cxx_zig_toolchain")
 
-# All the default toolchains, suitable for a quick demo or early prototyping.
-# Most real projects should copy/paste the implementation to configure them.
-system_demo_toolchains()
+system_python_bootstrap_toolchain(
+    name = "python_bootstrap",
+    visibility = ["PUBLIC"],
+)
+
+download_zig_distribution(
+    name = "zig",
+    version = "0.9.1",
+)
+
+cxx_zig_toolchain(
+    name = "cxx",
+    distribution = ":zig",
+    visibility = ["PUBLIC"],
+)
